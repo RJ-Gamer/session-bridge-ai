@@ -3,10 +3,14 @@
   "displayName": "Session Bridge AI",
   "publisher": "RajatJog",
   "description": "Persistent AI session context across tools",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "icon": "icon.png",
   "engines": {
     "vscode": "^1.116.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RJ-Gamer/session-bridge-ai.git"
   },
   "categories": [
     "Other"

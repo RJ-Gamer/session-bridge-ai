@@ -1,50 +1,156 @@
-# Session Bridge
+<div align="center">
 
-Never lose your AI coding context again.
+# 🌉 Session Bridge AI
 
-When working across multiple AI tools (Claude Code, Gemini, Codex, Amazon Q), 
-credits run out without warning and you lose all context. Session Bridge 
-maintains a running `SESSION.md` in your project that you can instantly hand 
-off to any AI tool to continue exactly where you left off.
+### Never lose your AI coding context again.
+
+[![Version](https://img.shields.io/visual-studio-marketplace/v/RajatJog.session-bridge-ai?color=4f8ef7&label=marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai)
+[![Installs](https://img.shields.io/visual-studio-marketplace/i/RajatJog.session-bridge-ai?color=4f8ef7&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/RajatJog.session-bridge-ai?color=4f8ef7&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai)
+[![License: MIT](https://img.shields.io/badge/license-MIT-4f8ef7?style=flat-square)](LICENSE)
+[![GitHub Sponsors](https://img.shields.io/badge/sponsor-%E2%9D%A4-ea4aaa?style=flat-square&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
+
+</div>
+
+---
+
+## The Problem
+
+You're deep into solving a problem with Claude Code. Credits run out — no warning, mid-sentence. You switch to Gemini. Now you have to explain everything again from scratch.
+
+**Session Bridge AI fixes this.**
+
+It maintains a running `SESSION.md` in your project — continuously updated, always ready to hand off to any AI tool so you can continue exactly where you left off.
+
+---
 
 ## Features
 
-- **Auto-save** — context saved automatically every 5 messages
-- **Manual save** — save anytime via status bar button or command
-- **Smart summaries** — Gemini AI generates structured handoff documents
-- **Secure key storage** — API key stored in VS Code secret storage, never in plaintext
-- **Persistent buffer** — context survives VS Code restarts
+- **🤖 AI-powered summaries** — Gemini generates rich, structured handoff documents
+- **⚡ Auto-save** — context saved automatically every 5 logged messages
+- **💾 Manual save** — save anytime via status bar button or command palette
+- **🔒 Secure key storage** — API key stored in VS Code secret storage, never in plaintext
+- **📦 Persistent buffer** — context survives VS Code restarts
+- **🧹 Clear buffer** — reset and start fresh anytime
+
+---
 
 ## Setup
 
-1. Install the extension
-2. Open Command Palette (`Ctrl+Shift+P`)
-3. Run `Session Bridge: Set Gemini API Key`
-4. Paste your [Gemini API key](https://aistudio.google.com/apikey) (free)
+**1. Install the extension**
+
+Search `Session Bridge AI` in VS Code Extensions or install from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai).
+
+**2. Get a free Gemini API key**
+
+Go to [Google AI Studio](https://aistudio.google.com/apikey) and create a free API key.
+
+**3. Set your API key**
+
+```
+Ctrl+Shift+P → Session Bridge: Set Gemini API Key
+```
+
+---
 
 ## Usage
 
-| Action | How |
+| Command | Action |
 |--------|-----|
-| Log what you're working on | `Ctrl+Shift+P` → `Session Bridge: Log Message` |
-| Save context now | Click `Save Context` in status bar or `Ctrl+Shift+P` → `Session Bridge: Save Context Now` |
-| Clear buffer | `Ctrl+Shift+P` → `Session Bridge: Clear Buffer` |
-| Update API key | `Ctrl+Shift+P` → `Session Bridge: Set Gemini API Key` |
+| `Session Bridge: Log Message` | Log what you're currently working on |
+| `Session Bridge: Save Context Now` | Generate/update SESSION.md immediately |
+| `Session Bridge: Set Gemini API Key` | Set or update your Gemini API key |
+| `Session Bridge: Clear Buffer` | Clear the current message buffer |
+
+Or click the **`Save Context`** button in the bottom right status bar.
+
+---
 
 ## Workflow
+1. Start working with Claude Code / Codex / Gemini / Amazon Q
+2. Log progress every few exchanges:
+3. Ctrl+Shift+P → "Session Bridge: Log Message"
+Credits die unexpectedly? → Open SESSION.md → Paste it as the first message to your next AI tool → Continue exactly where you left off
 
-1. Start working with any AI tool
-2. Log progress every few exchanges using `Log Message`
-3. If credits run out, open `SESSION.md` and paste it as the first message to your next AI tool
-4. Continue exactly where you left off
+---
+
+## Example SESSION.md Output
+
+```markdown
+## Problem
+Implement JWT-based authentication for a REST API
+
+## Approach
+Express.js + PostgreSQL, bcrypt for password hashing, JWT for stateless auth
+
+## Completed
+- POST /register — complete
+- POST /login — complete, returns access + refresh tokens
+- DB schema — finalized
+
+## In Progress
+- GET /me endpoint — needs auth middleware
+
+## Next Steps
+- Complete auth middleware
+- Add token refresh endpoint
+- Write integration tests
+
+## Key Decisions
+- Chose JWT over sessions for statelessness
+- Refresh tokens stored in DB for revocation support
+
+## Files Modified
+- src/routes/auth.ts
+- src/middleware/authenticate.ts
+- src/db/schema.sql
+```
+
+---
 
 ## Requirements
 
-- A free [Gemini API key](https://aistudio.google.com/apikey)
 - VS Code 1.116.0 or higher
+- A free [Gemini API key](https://aistudio.google.com/apikey)
+
+---
 
 ## Privacy
 
-Your code and session data is sent to Google's Gemini API to generate summaries.
-Your API key is stored securely using VS Code's built-in secret storage and never 
-written to disk in plaintext.
+Session data is sent to Google's Gemini API to generate summaries. Your API key is stored securely using VS Code's built-in secret storage and never written to disk in plaintext.
+
+---
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first.
+
+1. Fork the repo
+2. Create your branch (`git checkout -b feature/my-feature`)
+3. Commit your changes (`git commit -m 'feat: add my feature'`)
+4. Push to the branch (`git push origin feature/my-feature`)
+5. Open a Pull Request
+
+---
+
+## Support
+
+If Session Bridge AI saves you time, consider sponsoring:
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor%20on%20GitHub-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
+
+---
+
+<div align="center">
+
+Made with ❤️ by [RJ-Gamer](https://github.com/RJ-Gamer)
+
+</div>
+
+Save, then push to GitHub:
+
+```
+git add .
+git commit -m "docs: add README with badges and sponsor link"
+git push
+```
