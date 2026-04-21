@@ -1,78 +1,94 @@
-import axios from "axios";
-import * as fs from "fs";
-import * as path from "path";
 import * as vscode from "vscode";
-
-// --- Config ---
-const MESSAGE_THRESHOLD = 5;
-const BUFFER_STORAGE_KEY = "sessionBridgeBuffer";
-const BUFFER_COUNT_KEY = "sessionBridgeCount";
+import { appendToBuffer, initBuffer } from "./buffer";
+import { getConfig, setProvider } from "./config";
+import { COMMANDS, MESSAGES, SECRET_KEY, STATUS_BAR } from "./constants";
+import { updateSessionFile } from "./session";
 
 let statusBarItem: vscode.StatusBarItem;
 let ctx: vscode.ExtensionContext;
 
-// --- Helpers: Persistent Buffer ---
-function getBuffer(): string[] {
-  return ctx.workspaceState.get<string[]>(BUFFER_STORAGE_KEY, []);
+async function getApiKey(provider: string): Promise<string | undefined> {
+  return await ctx.secrets.get(SECRET_KEY(provider));
 }
 
-function getCount(): number {
-  return ctx.workspaceState.get<number>(BUFFER_COUNT_KEY, 0);
+async function setApiKey(provider: string, key: string): Promise<void> {
+  await ctx.secrets.store(SECRET_KEY(provider), key);
 }
 
-async function appendToBuffer(message: string): Promise<number> {
-  const buffer = getBuffer();
-  buffer.push(`[${new Date().toLocaleTimeString()}] ${message}`);
-  await ctx.workspaceState.update(BUFFER_STORAGE_KEY, buffer);
-  const newCount = getCount() + 1;
-  await ctx.workspaceState.update(BUFFER_COUNT_KEY, newCount);
-  return newCount;
+async function executeSetApiKey(): Promise<void> {
+  const provider = await vscode.window.showQuickPick(
+    [
+      {
+        label: "$(star) Gemini",
+        description: "Google Gemini — free tier available",
+        value: "gemini",
+      },
+      {
+        label: "$(hubot) Claude",
+        description: "Anthropic Claude — requires credits",
+        value: "claude",
+      },
+      {
+        label: "$(robot) OpenAI",
+        description: "OpenAI GPT-4o mini — requires credits",
+        value: "openai",
+      },
+    ],
+    { placeHolder: "Select AI provider to configure" },
+  );
+
+  if (!provider) return;
+
+  const key = await vscode.window.showInputBox({
+    prompt: `Enter your ${provider.label} API key`,
+    placeHolder:
+      provider.value === "gemini"
+        ? "AIza..."
+        : provider.value === "claude"
+          ? "sk-ant-..."
+          : "sk-...",
+    password: true,
+    ignoreFocusOut: true,
+  });
+
+  if (!key) return;
+
+  await setApiKey(provider.value, key);
+  await setProvider(provider.value);
+  vscode.window.showInformationMessage(MESSAGES.KEY_SAVED(provider.label));
 }
 
-async function clearBuffer(): Promise<void> {
-  await ctx.workspaceState.update(BUFFER_STORAGE_KEY, []);
-  await ctx.workspaceState.update(BUFFER_COUNT_KEY, 0);
-}
-
-// --- Helpers: Secure API Key ---
-async function getApiKey(): Promise<string | undefined> {
-  return await ctx.secrets.get("session-bridge.geminiApiKey");
-}
-
-async function setApiKey(key: string): Promise<void> {
-  await ctx.secrets.store("session-bridge.geminiApiKey", key);
-}
-
-// --- Activation ---
 export function activate(extCtx: vscode.ExtensionContext) {
   ctx = extCtx;
+  initBuffer(ctx);
 
-  // Status bar button
   statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right,
     100,
   );
-  statusBarItem.text = "$(save) Save Context";
+  statusBarItem.text = STATUS_BAR.IDLE;
   statusBarItem.tooltip = "Save session context to SESSION.md";
-  statusBarItem.command = "session-bridge.saveNow";
+  statusBarItem.command = COMMANDS.SAVE_NOW;
   statusBarItem.show();
 
   ctx.subscriptions.push(statusBarItem);
 
-  // Save Now
   ctx.subscriptions.push(
-    vscode.commands.registerCommand("session-bridge.saveNow", async () => {
-      await updateSessionFile("Manual save triggered.");
+    vscode.commands.registerCommand(COMMANDS.SAVE_NOW, async () => {
+      await updateSessionFile(
+        "Manual save triggered.",
+        statusBarItem,
+        getApiKey,
+        executeSetApiKey,
+      );
     }),
   );
 
-  // Log Message
   ctx.subscriptions.push(
     vscode.commands.registerCommand(
-      "session-bridge.logMessage",
+      COMMANDS.LOG_MESSAGE,
       async (message?: string) => {
         let msg = message;
-
         if (!msg) {
           msg = await vscode.window.showInputBox({
             prompt: "What are you working on right now?",
@@ -81,145 +97,38 @@ export function activate(extCtx: vscode.ExtensionContext) {
             ignoreFocusOut: true,
           });
         }
-
         if (!msg) return;
 
+        const { threshold } = getConfig();
         const count = await appendToBuffer(msg);
         vscode.window.showInformationMessage(
-          `Logged: "${msg}" (${count}/${MESSAGE_THRESHOLD})`,
+          `Logged: "${msg}" (${count}/${threshold})`,
         );
 
-        if (count % MESSAGE_THRESHOLD === 0) {
-          await updateSessionFile("Auto-save: threshold reached.");
+        if (count % threshold === 0) {
+          await updateSessionFile(
+            "Auto-save: threshold reached.",
+            statusBarItem,
+            getApiKey,
+            executeSetApiKey,
+          );
         }
       },
     ),
   );
 
-  // Set API Key
   ctx.subscriptions.push(
-    vscode.commands.registerCommand("session-bridge.setApiKey", async () => {
-      const key = await vscode.window.showInputBox({
-        prompt: "Enter your Gemini API key",
-        placeHolder: "AIza...",
-        password: true,
-        ignoreFocusOut: true,
-      });
-
-      if (!key) return;
-
-      await setApiKey(key);
-      vscode.window.showInformationMessage("Gemini API key saved securely.");
-    }),
+    vscode.commands.registerCommand(COMMANDS.SET_API_KEY, executeSetApiKey),
   );
 
-  // Clear Buffer
   ctx.subscriptions.push(
-    vscode.commands.registerCommand("session-bridge.clearBuffer", async () => {
+    vscode.commands.registerCommand(COMMANDS.CLEAR_BUFFER, async () => {
+      const { clearBuffer } = await import("./buffer.js");
       await clearBuffer();
-      vscode.window.showInformationMessage("Session Bridge: buffer cleared.");
+      vscode.window.showInformationMessage(MESSAGES.BUFFER_CLEARED);
     }),
   );
-
-  vscode.window.showInformationMessage(
-    "Session Bridge is active. SESSION.md will be maintained automatically.",
-  );
-}
-
-// --- Core: Generate and write SESSION.md ---
-async function updateSessionFile(trigger: string) {
-  const workspacePath = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-  if (!workspacePath) {
-    vscode.window.showErrorMessage("Session Bridge: No workspace folder open.");
-    return;
-  }
-
-  const apiKey = await getApiKey();
-  if (!apiKey) {
-    const action = await vscode.window.showErrorMessage(
-      "Session Bridge: Gemini API key not set.",
-      "Set API Key",
-    );
-    if (action === "Set API Key") {
-      await vscode.commands.executeCommand("session-bridge.setApiKey");
-    }
-    return;
-  }
-
-  const buffer = getBuffer();
-  const conversationText =
-    buffer.length > 0 ? buffer.join("\n") : "No messages logged yet.";
-
-  const sessionPath = path.join(workspacePath, "SESSION.md");
-  let existingContext = "";
-  if (fs.existsSync(sessionPath)) {
-    existingContext = fs.readFileSync(sessionPath, "utf-8");
-  }
-
-  const prompt = `
-You are maintaining a session handoff document for a software project.
-
-EXISTING SESSION CONTEXT (if any):
-${existingContext || "None yet."}
-
-NEW MESSAGES/ACTIVITY SINCE LAST UPDATE:
-${conversationText}
-
-Update and return a SESSION.md in exactly this format:
-
-## Problem
-[What is being solved]
-
-## Approach
-[Technical approach decided]
-
-## Completed
-[Bullet list of what is done]
-
-## In Progress
-[What is currently being worked on]
-
-## Next Steps
-[Exact next actions]
-
-## Key Decisions
-[Important choices made and why]
-
-## Files Modified
-[List of relevant files]
-
----
-Last updated: ${new Date().toLocaleString()}
-Trigger: ${trigger}
-`;
-
-  try {
-    statusBarItem.text = "$(sync~spin) Saving...";
-
-    const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
-      {
-        contents: [{ parts: [{ text: prompt }] }],
-      },
-      {
-        headers: { "content-type": "application/json" },
-        timeout: 15000,
-      },
-    );
-
-    const summary = response.data.candidates[0].content.parts[0].text;
-    fs.writeFileSync(sessionPath, summary, "utf-8");
-    await clearBuffer();
-
-    statusBarItem.text = "$(save) Save Context";
-    vscode.window.showInformationMessage("SESSION.md updated successfully.");
-  } catch (err: any) {
-    statusBarItem.text = "$(error) Save Failed";
-    const detail = err.response?.data
-      ? JSON.stringify(err.response.data)
-      : err.message;
-    vscode.window.showErrorMessage(`Session Bridge error: ${detail}`);
-  }
+  vscode.window.showInformationMessage(MESSAGES.ACTIVE);
 }
 
 export function deactivate() {}

@@ -3,7 +3,7 @@
   "displayName": "Session Bridge AI",
   "publisher": "RajatJog",
   "description": "Persistent AI session context across tools",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "icon": "icon.png",
   "engines": {
     "vscode": "^1.116.0"
@@ -31,13 +31,50 @@
       },
       {
         "command": "session-bridge.setApiKey",
-        "title": "Session Bridge: Set Gemini API Key"
+        "title": "Session Bridge: Set AI Provider & API Key"
       },
       {
         "command": "session-bridge.clearBuffer",
         "title": "Session Bridge: Clear Buffer"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Session Bridge AI",
+      "properties": {
+        "session-bridge.provider": {
+          "type": "string",
+          "default": "gemini",
+          "enum": [
+            "gemini",
+            "claude",
+            "openai"
+          ],
+          "enumDescriptions": [
+            "Google Gemini (free tier available)",
+            "Anthropic Claude (requires API credits)",
+            "OpenAI GPT-4 (requires API credits)"
+          ],
+          "description": "AI provider to use for generating SESSION.md"
+        },
+        "session-bridge.messageThreshold": {
+          "type": "number",
+          "default": 5,
+          "minimum": 2,
+          "maximum": 20,
+          "description": "Number of logged messages before auto-saving SESSION.md"
+        },
+        "session-bridge.captureGitDiff": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include git diff in SESSION.md context"
+        },
+        "session-bridge.captureOpenFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include currently open files in SESSION.md context"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
