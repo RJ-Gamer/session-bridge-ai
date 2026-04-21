@@ -4,11 +4,14 @@
 
 ### Never lose your AI coding context again.
 
-[![Version](https://img.shields.io/visual-studio-marketplace/v/RajatJog.session-bridge-ai?color=4f8ef7&label=marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai)
-[![Installs](https://img.shields.io/visual-studio-marketplace/i/RajatJog.session-bridge-ai?color=4f8ef7&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/RajatJog.session-bridge-ai?color=4f8ef7&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai)
-[![License: MIT](https://img.shields.io/badge/license-MIT-4f8ef7?style=flat-square)](LICENSE)
-[![GitHub Sponsors](https://img.shields.io/badge/sponsor-%E2%9D%A4-ea4aaa?style=flat-square&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
+![VS Code](https://img.shields.io/badge/VS%20CODE-EXTENSION-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+![Version](https://img.shields.io/badge/VERSION-0.0.4-4f8ef7?style=for-the-badge)
+![License](https://img.shields.io/badge/LICENSE-MIT-yellow?style=for-the-badge)
+![Status](https://img.shields.io/badge/STATUS-ACTIVE-brightgreen?style=for-the-badge)
+![AI](https://img.shields.io/badge/POWERED%20BY-GEMINI%20AI-orange?style=for-the-badge&logo=google)
+![PRs](https://img.shields.io/badge/PRS-WELCOME-blueviolet?style=for-the-badge&logo=github)
+[![Sponsor](https://img.shields.io/badge/SPONSOR-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
+
 
 </div>
 
