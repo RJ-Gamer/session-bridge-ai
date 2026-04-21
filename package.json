@@ -3,7 +3,7 @@
   "displayName": "Session Bridge AI",
   "publisher": "RajatJog",
   "description": "Persistent AI session context across tools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "icon": "icon.png",
   "engines": {
     "vscode": "^1.116.0"
