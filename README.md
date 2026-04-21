@@ -5,13 +5,12 @@
 ### Never lose your AI coding context again.
 
 ![VS Code](https://img.shields.io/badge/VS%20CODE-EXTENSION-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)
-![Version](https://img.shields.io/badge/VERSION-0.0.4-4f8ef7?style=for-the-badge)
+![Version](https://img.shields.io/badge/VERSION-0.1.0-4f8ef7?style=for-the-badge)
 ![License](https://img.shields.io/badge/LICENSE-MIT-yellow?style=for-the-badge)
 ![Status](https://img.shields.io/badge/STATUS-ACTIVE-brightgreen?style=for-the-badge)
-![AI](https://img.shields.io/badge/POWERED%20BY-GEMINI%20AI-orange?style=for-the-badge&logo=google)
+![Providers](https://img.shields.io/badge/PROVIDERS-GEMINI%20%7C%20CLAUDE%20%7C%20OPENAI-orange?style=for-the-badge)
 ![PRs](https://img.shields.io/badge/PRS-WELCOME-blueviolet?style=for-the-badge&logo=github)
 [![Sponsor](https://img.shields.io/badge/SPONSOR-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
-
 
 </div>
 
@@ -23,18 +22,20 @@ You're deep into solving a problem with Claude Code. Credits run out — no warn
 
 **Session Bridge AI fixes this.**
 
-It maintains a running `SESSION.md` in your project — continuously updated, always ready to hand off to any AI tool so you can continue exactly where you left off.
+It maintains a running `SESSION.md` in your project — automatically capturing git diffs, open files, and your progress notes — always ready to hand off to any AI tool so you continue exactly where you left off.
 
 ---
 
 ## Features
 
-- **🤖 AI-powered summaries** — Gemini generates rich, structured handoff documents
-- **⚡ Auto-save** — context saved automatically every 5 logged messages
+- **🤖 Multi-provider** — works with Gemini, Claude, and OpenAI
+- **📂 Git diff capture** — automatically includes recent code changes
+- **👁️ Open files capture** — includes context from your currently open files
+- **⚡ Auto-save** — context saved automatically every N logged messages
 - **💾 Manual save** — save anytime via status bar button or command palette
-- **🔒 Secure key storage** — API key stored in VS Code secret storage, never in plaintext
+- **🔒 Secure key storage** — API keys stored in VS Code secret storage, never in plaintext
 - **📦 Persistent buffer** — context survives VS Code restarts
-- **🧹 Clear buffer** — reset and start fresh anytime
+- **⚙️ Configurable threshold** — set auto-save threshold to any value (minimum 2)
 
 ---
 
@@ -44,11 +45,15 @@ It maintains a running `SESSION.md` in your project — continuously updated, al
 
 Search `Session Bridge AI` in VS Code Extensions or install from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai).
 
-**2. Get a free Gemini API key**
+**2. Get a free API key**
 
-Go to [Google AI Studio](https://aistudio.google.com/apikey) and create a free API key.
+| Provider | Free Tier | Link |
+|----------|-----------|------|
+| Gemini | ✅ Yes | [Google AI Studio](https://aistudio.google.com/apikey) |
+| Claude | ❌ Credits needed | [Anthropic Console](https://console.anthropic.com/settings/keys) |
+| OpenAI | ❌ Credits needed | [OpenAI Platform](https://platform.openai.com/api-keys) |
 
-**3. Set your API key**
+**3. Set your provider and API key**
 
 ```
 Ctrl+Shift+P → Session Bridge: Set Gemini API Key
@@ -56,20 +61,33 @@ Ctrl+Shift+P → Session Bridge: Set Gemini API Key
 
 ---
 
-## Usage
+
+## Commands
 
 | Command | Action |
-|--------|-----|
+|---------|--------|
 | `Session Bridge: Log Message` | Log what you're currently working on |
 | `Session Bridge: Save Context Now` | Generate/update SESSION.md immediately |
-| `Session Bridge: Set Gemini API Key` | Set or update your Gemini API key |
+| `Session Bridge: Set AI Provider & API Key` | Set provider and API key |
 | `Session Bridge: Clear Buffer` | Clear the current message buffer |
 
-Or click the **`Save Context`** button in the bottom right status bar.
+Or click **`Save Context`** in the bottom right status bar.
+
+---
+
+## Settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `session-bridge.provider` | `gemini` | AI provider — `gemini`, `claude`, or `openai` |
+| `session-bridge.messageThreshold` | `5` | Messages before auto-save (min 2) |
+| `session-bridge.captureGitDiff` | `true` | Include git diff in context |
+| `session-bridge.captureOpenFiles` | `true` | Include open files in context |
 
 ---
 
 ## Workflow
+
 1. Start working with Claude Code / Codex / Gemini / Amazon Q
 2. Log progress every few exchanges:
 3. Ctrl+Shift+P → "Session Bridge: Log Message"
