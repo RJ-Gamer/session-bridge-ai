@@ -131,6 +131,14 @@ Pull requests are welcome. For major changes, please open an issue first.
 4. Push to the branch (`git push origin feature/my-feature`)
 5. Open a Pull Request
 
+Save, then push to GitHub:
+
+```
+git add .
+git commit -m "docs: add README with badges and sponsor link"
+git push
+```
+
 ---
 
 ## Support
@@ -147,10 +155,3 @@ Made with ❤️ by [RJ-Gamer](https://github.com/RJ-Gamer)
 
 </div>
 
-Save, then push to GitHub:
-
-```
-git add .
-git commit -m "docs: add README with badges and sponsor link"
-git push
-```
