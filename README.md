@@ -4,13 +4,11 @@
 
 ### Never lose your AI coding context again.
 
-![VS Code](https://img.shields.io/badge/VS%20CODE-EXTENSION-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)
-![Version](https://img.shields.io/badge/VERSION-0.1.0-4f8ef7?style=for-the-badge)
-![License](https://img.shields.io/badge/LICENSE-MIT-yellow?style=for-the-badge)
-![Status](https://img.shields.io/badge/STATUS-ACTIVE-brightgreen?style=for-the-badge)
-![Providers](https://img.shields.io/badge/PROVIDERS-GEMINI%20%7C%20CLAUDE%20%7C%20OPENAI-orange?style=for-the-badge)
-![PRs](https://img.shields.io/badge/PRS-WELCOME-blueviolet?style=for-the-badge&logo=github)
-[![Sponsor](https://img.shields.io/badge/SPONSOR-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai)
+[![License](https://img.shields.io/github/license/RJ-Gamer/session-bridge-ai?style=for-the-badge&label=license&color=yellow)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/RJ-Gamer/session-bridge-ai?style=for-the-badge&logo=github&label=stars&color=4f8ef7)](https://github.com/RJ-Gamer/session-bridge-ai/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/RJ-Gamer/session-bridge-ai?style=for-the-badge&logo=github&label=last%20commit&color=4f8ef7)](https://github.com/RJ-Gamer/session-bridge-ai/commits/main)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
 
 </div>
 
@@ -175,4 +173,3 @@ If Session Bridge AI saves you time, consider sponsoring:
 Made with ❤️ by [RJ-Gamer](https://github.com/RJ-Gamer)
 
 </div>
-
