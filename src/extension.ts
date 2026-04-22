@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
 import { appendToBuffer, initBuffer } from "./buffer";
 import { getConfig, setProvider } from "./config";
-import { COMMANDS, MESSAGES, SECRET_KEY, STATUS_BAR } from "./constants";
-import { updateSessionFile } from "./session";
+import { COMMANDS, MESSAGES, STATUS_BAR, SECRET_KEY, NEW_SESSION } from './constants';import { updateSessionFile, startNewSession } from './session';
 
 let statusBarItem: vscode.StatusBarItem;
 let ctx: vscode.ExtensionContext;
@@ -128,6 +127,13 @@ export function activate(extCtx: vscode.ExtensionContext) {
       vscode.window.showInformationMessage(MESSAGES.BUFFER_CLEARED);
     }),
   );
+
+  ctx.subscriptions.push(
+    vscode.commands.registerCommand(NEW_SESSION, async () => {
+      await startNewSession(statusBarItem);
+    })
+  );
+  
   vscode.window.showInformationMessage(MESSAGES.ACTIVE);
 }
 

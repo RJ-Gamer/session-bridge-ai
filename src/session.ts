@@ -3,7 +3,14 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { clearBuffer, getBuffer } from "./buffer";
 import { getConfig } from "./config";
-import { MESSAGES, SESSION_FILE, STATUS_BAR } from "./constants";
+import {
+  HANDOFF_PROMPT,
+  MESSAGES,
+  NO_SESSION_FILE,
+  SESSION_COPIED,
+  SESSION_FILE,
+  STATUS_BAR,
+} from "./constants";
 import { getGitDiff, getOpenFiles } from "./context";
 import { callAI } from "./providers";
 
@@ -127,5 +134,51 @@ Trigger: ${trigger}
       ? JSON.stringify(err.response.data)
       : err.message;
     vscode.window.showErrorMessage(`Session Bridge error: ${detail}`);
+  }
+}
+
+export async function startNewSession(
+  statusBarItem: vscode.StatusBarItem,
+): Promise<void> {
+  const workspacePath = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+  if (!workspacePath) {
+    vscode.window.showErrorMessage(MESSAGES.NO_WORKSPACE);
+    return;
+  }
+
+  const sessionPath = path.join(workspacePath, SESSION_FILE);
+
+  if (!fs.existsSync(sessionPath)) {
+    vscode.window.showErrorMessage(NO_SESSION_FILE);
+    return;
+  }
+
+  try {
+    const sessionContent = fs.readFileSync(sessionPath, "utf-8");
+
+    if (!sessionContent.trim()) {
+      vscode.window.showErrorMessage(NO_SESSION_FILE);
+      return;
+    }
+
+    const handoff = HANDOFF_PROMPT(sessionContent);
+    await vscode.env.clipboard.writeText(handoff);
+
+    statusBarItem.text = "$(check) Context Copied!";
+    setTimeout(() => {
+      statusBarItem.text = STATUS_BAR.IDLE;
+    }, 3000);
+
+    const action = await vscode.window.showInformationMessage(
+      SESSION_COPIED,
+      "Open SESSION.md",
+    );
+
+    if (action === "Open SESSION.md") {
+      const doc = await vscode.workspace.openTextDocument(sessionPath);
+      await vscode.window.showTextDocument(doc);
+    }
+  } catch (err: any) {
+    vscode.window.showErrorMessage(`Session Bridge: ${err.message}`);
   }
 }

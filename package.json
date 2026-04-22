@@ -36,6 +36,10 @@
       {
         "command": "session-bridge.clearBuffer",
         "title": "Session Bridge: Clear Buffer"
+      },
+      {
+        "command": "session-bridge.newSession",
+        "title": "Session Bridge: Start New Session"
       }
     ],
     "configuration": {
