@@ -68,6 +68,8 @@ Ctrl+Shift+P → Session Bridge: Set Gemini API Key
 | `Session Bridge: Save Context Now` | Generate/update SESSION.md immediately |
 | `Session Bridge: Set AI Provider & API Key` | Set provider and API key |
 | `Session Bridge: Clear Buffer` | Clear the current message buffer |
+| `Session Bridge: Start New Session` | Copy full handoff prompt to clipboard — ready to paste into any AI tool |
+
 
 Or click **`Save Context`** in the bottom right status bar.
 

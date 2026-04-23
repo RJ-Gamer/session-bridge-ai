@@ -28,3 +28,12 @@
 - Atomic file write using temp file + rename to prevent corruption
 
 ---
+
+
+## [0.2.0] - 2026-04-22
+
+### Added
+- Start New Session command — auto-copies handoff prompt to clipboard
+- Handoff prompt wraps SESSION.md with instructions for the next AI tool
+- Status bar flashes confirmation when context is copied
+- Option to open SESSION.md directly from the notification
