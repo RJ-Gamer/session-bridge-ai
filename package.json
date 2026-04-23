@@ -85,8 +85,8 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "vscode:prepublish": "node build.js",
+    "compile": "node build.js",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
@@ -98,6 +98,7 @@
     "@types/vscode": "^1.116.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.28.0",
     "eslint": "^9.39.3",
     "sharp": "^0.34.5",
     "typescript": "^5.9.3",
