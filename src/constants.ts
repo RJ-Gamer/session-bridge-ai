@@ -78,3 +78,17 @@ export const NEW_SESSION = "session-bridge.newSession";
 
 export const OPEN_DASHBOARD = "session-bridge.openDashboard";
 export const DASHBOARD_TITLE = "Session Bridge: Open Token Dashboard";
+
+export const PRICING_DOCS_URL = "https://www.anthropic.com/pricing";
+
+export const DEFAULT_PRICING: Record<
+  string,
+  { input: number; output: number; cacheRead: number }
+> = {
+  "claude-sonnet-4-6": { input: 3.0, output: 15.0, cacheRead: 0.3 },
+  "claude-opus-4-6": { input: 15.0, output: 75.0, cacheRead: 1.5 },
+  "claude-haiku-4-5": { input: 0.8, output: 4.0, cacheRead: 0.08 },
+  "claude-sonnet-4-5": { input: 3.0, output: 15.0, cacheRead: 0.3 },
+  "claude-haiku-4-5-20251001": { input: 0.8, output: 4.0, cacheRead: 0.08 },
+  default: { input: 3.0, output: 15.0, cacheRead: 0.3 },
+};

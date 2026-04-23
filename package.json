@@ -46,9 +46,34 @@
         "title": "Session Bridge: Open Token Dashboard"
       }
     ],
+    "keybindings": [
+      {
+        "command": "session-bridge.logMessage",
+        "key": "ctrl+alt+l",
+        "mac": "cmd+alt+l",
+        "when": "editorFocus"
+      },
+      {
+        "command": "session-bridge.saveNow",
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s",
+        "when": "editorFocus"
+      },
+      {
+        "command": "session-bridge.newSession",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n",
+        "when": "editorFocus"
+      }
+    ],
     "configuration": {
       "title": "Session Bridge AI",
       "properties": {
+        "session-bridge.customPricing": {
+          "type": "object",
+          "default": {},
+          "description": "Custom pricing overrides per model (USD per million tokens). Example: { \"claude-sonnet-4-6\": { \"input\": 3.0, \"output\": 15.0, \"cacheRead\": 0.30 } }"
+        },
         "session-bridge.provider": {
           "type": "string",
           "default": "gemini",

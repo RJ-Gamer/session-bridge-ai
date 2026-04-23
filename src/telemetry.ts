@@ -35,16 +35,22 @@ export interface TelemetryResult {
   dataPath: string;
 }
 
-// Pricing per million tokens
-const PRICING: Record<
+import { DEFAULT_PRICING } from "./constants";
+
+function getPricing(): Record<
   string,
   { input: number; output: number; cacheRead: number }
-> = {
-  "claude-sonnet-4-6": { input: 3.0, output: 15.0, cacheRead: 0.3 },
-  "claude-opus-4-6": { input: 15.0, output: 75.0, cacheRead: 1.5 },
-  "claude-haiku-4-5": { input: 0.8, output: 4.0, cacheRead: 0.08 },
-  default: { input: 3.0, output: 15.0, cacheRead: 0.3 },
-};
+> {
+  try {
+    const config = require("vscode")
+      .workspace.getConfiguration("session-bridge")
+      .get<Record<string, any>>("customPricing", {});
+
+    return { ...DEFAULT_PRICING, ...config };
+  } catch {
+    return DEFAULT_PRICING;
+  }
+}
 
 function estimateCost(
   model: string,
@@ -52,11 +58,12 @@ function estimateCost(
   outputTokens: number,
   cacheReadTokens: number,
 ): number {
-  const pricing = PRICING[model] || PRICING["default"];
+  const pricing = getPricing();
+  const p = pricing[model] || pricing["default"];
   return (
-    (inputTokens / 1_000_000) * pricing.input +
-    (outputTokens / 1_000_000) * pricing.output +
-    (cacheReadTokens / 1_000_000) * pricing.cacheRead
+    (inputTokens / 1_000_000) * p.input +
+    (outputTokens / 1_000_000) * p.output +
+    (cacheReadTokens / 1_000_000) * p.cacheRead
   );
 }
 
@@ -79,6 +86,36 @@ export function getClaudeProjectsPath(): string {
 
   // Return default even if it doesn't exist — caller handles missing
   return candidates[0];
+}
+
+function resolveProjectName(cwd: string, fallback: string): string {
+  if (!cwd) return fallback;
+
+  // Get the basename of the cwd path — most meaningful project name
+  const base = path.basename(cwd);
+
+  // Filter out system/user directories that aren't project names
+  const systemDirs = [
+    "users",
+    "home",
+    "sammyak",
+    "desktop",
+    "documents",
+    "downloads",
+    "appdata",
+    "roaming",
+    "local",
+    "temp",
+    "src",
+    "dist",
+    "node_modules",
+    "out",
+  ];
+
+  if (systemDirs.includes(base.toLowerCase())) return fallback;
+  if (base.length <= 1) return fallback;
+
+  return base;
 }
 
 function parseJsonlFile(
@@ -133,7 +170,7 @@ function parseJsonlFile(
 
     // Derive project name from cwd field if available
     const cwd = entry.cwd || "";
-    const projectName = cwd ? path.basename(cwd) : project;
+    const projectName = resolveProjectName(cwd, project);
 
     results.push({
       timestamp: entry.timestamp,

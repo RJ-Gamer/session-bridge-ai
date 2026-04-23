@@ -57,3 +57,18 @@
 - CLAUDE_CONFIG_DIR environment variable support for custom installations
 - Graceful error state with fix instructions when Claude Code not installed
 - Handles unreadable files and malformed JSONL lines silently
+
+
+## [0.5.0] - 2026-04-23
+
+### Added
+- Keyboard shortcuts — Ctrl+Alt+L (log), Ctrl+Alt+S (save), Ctrl+Alt+N (new session)
+- Onboarding panel — shown automatically on first install with setup guide
+- Token dashboard date range selector — 7, 14, 30, 60, 90 days
+- Model recommendation in SESSION.md — suggests Haiku/Sonnet/Opus based on task complexity
+- Peak hour warning — alerts during high-demand Claude hours (8AM-2PM ET) with save prompt
+- Custom pricing overrides — set your own token costs via session-bridge.customPricing setting
+
+### Fixed
+- Project name leak — observer-sessions and similar system paths now resolved correctly
+- Peak hour interval properly disposed on extension deactivate

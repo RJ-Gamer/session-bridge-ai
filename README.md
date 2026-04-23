@@ -5,7 +5,7 @@
 ### Never lose your AI coding context again.
 
 ![VS Code](https://img.shields.io/badge/VS%20CODE-EXTENSION-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)
-![Version](https://img.shields.io/badge/VERSION-0.4.0-4f8ef7?style=for-the-badge)
+![Version](https://img.shields.io/badge/VERSION-0.5.0-4f8ef7?style=for-the-badge)
 ![License](https://img.shields.io/badge/LICENSE-MIT-yellow?style=for-the-badge)
 ![Status](https://img.shields.io/badge/STATUS-ACTIVE-brightgreen?style=for-the-badge)
 ![Providers](https://img.shields.io/badge/PROVIDERS-GEMINI%20%7C%20CLAUDE%20%7C%20OPENAI-orange?style=for-the-badge)
@@ -34,7 +34,9 @@ It maintains a running `SESSION.md` in your project — automatically capturing 
 - **⚡ Auto-save** — context saved automatically every N logged messages
 - **💾 Manual save** — save anytime via status bar button or command palette
 - **📋 One-click handoff** — copies full handoff prompt to clipboard instantly
-- **📊 Token Dashboard** — visualize your Claude Code token usage and costs
+- **📊 Token Dashboard** — visualize Claude Code token usage and costs by project
+- **🧠 Model recommendation** — SESSION.md suggests Haiku/Sonnet/Opus based on task complexity
+- **⏰ Peak hour warning** — alerts during high-demand Claude hours to save context early
 - **🔒 Secure key storage** — API keys stored in VS Code secret storage, never in plaintext
 - **📦 Persistent buffer** — context survives VS Code restarts
 - **⚙️ Configurable threshold** — set auto-save threshold to any value (minimum 2)
@@ -58,21 +60,21 @@ Search `Session Bridge AI` in VS Code Extensions or install from the [Marketplac
 **3. Set your provider and API key**
 
 ```
-Ctrl+Shift+P → Session Bridge: Set Gemini API Key
+Ctrl+Shift+P → Session Bridge: Set AI Provider & API Key
 ```
 
 ---
 
 ## Commands
 
-| Command | Action |
-|---------|--------|
-| `Session Bridge: Log Message` | Log what you're currently working on |
-| `Session Bridge: Save Context Now` | Generate/update SESSION.md immediately |
-| `Session Bridge: Start New Session` | Copy full handoff prompt to clipboard |
-| `Session Bridge: Set AI Provider & API Key` | Set provider and API key |
-| `Session Bridge: Clear Buffer` | Clear the current message buffer |
-| `Session Bridge: Open Token Dashboard` | View token usage and cost analytics |
+| Command | Shortcut | Action |
+|---------|----------|--------|
+| `Session Bridge: Log Message` | `Ctrl+Alt+L` | Log what you're currently working on |
+| `Session Bridge: Save Context Now` | `Ctrl+Alt+S` | Generate/update SESSION.md immediately |
+| `Session Bridge: Start New Session` | `Ctrl+Alt+N` | Copy full handoff prompt to clipboard |
+| `Session Bridge: Set AI Provider & API Key` | — | Set provider and API key |
+| `Session Bridge: Clear Buffer` | — | Clear the current message buffer |
+| `Session Bridge: Open Token Dashboard` | — | View token usage and cost analytics |
 
 Or click **`Save Context`** in the bottom right status bar.
 
@@ -82,21 +84,27 @@ Or click **`Save Context`** in the bottom right status bar.
 
 Session Bridge AI reads Claude Code's local telemetry files to show you exactly how many tokens you're burning and what it costs.
 
-Open it with:
-
 ```
 Ctrl+Shift+P → Session Bridge: Open Token Dashboard
 ```
+
 **What you'll see:**
 - Total tokens, input tokens, output tokens, cache reads
 - Estimated cost per project and overall
-- Daily usage bar chart (last 7 days)
+- Daily usage bar chart with date range selector (7/14/30/60/90 days)
 - Per-project breakdown with turn counts
 - Model usage breakdown
 
 **Requirements:** Claude Code must be installed and used at least once.
 
-**Custom installation:** If you installed Claude Code in a non-standard location, set the `CLAUDE_CONFIG_DIR` environment variable to point to your `.claude` directory.
+**Custom installation:** If you installed Claude Code in a non-standard location, set the `CLAUDE_CONFIG_DIR` environment variable.
+
+**Custom pricing:** Override token costs in settings:
+```json
+"session-bridge.customPricing": {
+  "claude-sonnet-4-6": { "input": 3.0, "output": 15.0, "cacheRead": 0.30 }
+}
+```
 
 ---
 
@@ -108,14 +116,16 @@ Ctrl+Shift+P → Session Bridge: Open Token Dashboard
 | `session-bridge.messageThreshold` | `5` | Messages before auto-save (min 2) |
 | `session-bridge.captureGitDiff` | `true` | Include git diff in context |
 | `session-bridge.captureOpenFiles` | `true` | Include open files in context |
+| `session-bridge.customPricing` | `{}` | Custom token pricing per model |
 
 ---
 
 ## Workflow
+
 1. Start working with Claude Code / Codex / Gemini / Amazon Q
 2. Log progress every few exchanges:
-3. Ctrl+Shift+P → "Session Bridge: Log Message"
-Credits die unexpectedly? → Open SESSION.md → Paste it as the first message to your next AI tool → Continue exactly where you left off
+3. Ctrl+Alt+L → type what you're working on
+Credits die unexpectedly? → `Ctrl+Alt+N` — copies full handoff prompt to clipboard → Paste into your next AI tool → Continue exactly where you left off
 
 ---
 
@@ -146,9 +156,20 @@ Express.js + PostgreSQL, bcrypt for password hashing, JWT for stateless auth
 - Refresh tokens stored in DB for revocation support
 
 ## Files Modified
-- src/routes/auth.ts
-- src/middleware/authenticate.ts
-- src/db/schema.sql
+- src/routes/auth.ts — login and register routes
+- src/middleware/authenticate.ts — JWT verification
+
+## Recommended Model
+Claude Sonnet — standard development task involving multiple
+files and API design. Haiku would suffice for simple edits.
+
+## How To Continue
+Complete the GET /me route using the authenticate middleware.
+Then add POST /auth/refresh for token renewal.
+
+---
+Provider: gemini
+Last updated: 4/23/2026, 2:56:27 PM
 ```
 
 ---
@@ -156,39 +177,30 @@ Express.js + PostgreSQL, bcrypt for password hashing, JWT for stateless auth
 ## Requirements
 
 - VS Code 1.116.0 or higher
-- A free [Gemini API key](https://aistudio.google.com/apikey)
+- API key for at least one supported provider
+- Claude Code (optional, for Token Dashboard)
 
 ---
 
 ## Privacy
 
-Session data is sent to Google's Gemini API to generate summaries. Your API key is stored securely using VS Code's built-in secret storage and never written to disk in plaintext.
+Session data including code snippets and git diffs is sent to your chosen AI provider to generate summaries. API keys are stored in VS Code secret storage and never written to disk. Token Dashboard data is read locally and never transmitted anywhere.
 
 ---
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first.
+Pull requests are welcome. For major changes please open an issue first.
 
 1. Fork the repo
 2. Create your branch (`git checkout -b feature/my-feature`)
-3. Commit your changes (`git commit -m 'feat: add my feature'`)
-4. Push to the branch (`git push origin feature/my-feature`)
+3. Commit (`git commit -m 'feat: add my feature'`)
+4. Push (`git push origin feature/my-feature`)
 5. Open a Pull Request
-
-Save, then push to GitHub:
-
-```
-git add .
-git commit -m "docs: add README with badges and sponsor link"
-git push
-```
 
 ---
 
 ## Support
-
-If Session Bridge AI saves you time, consider sponsoring:
 
 [![GitHub Sponsors](https://img.shields.io/badge/Sponsor%20on%20GitHub-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
 

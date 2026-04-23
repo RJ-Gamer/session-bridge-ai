@@ -9,42 +9,39 @@ export function openDashboard(context: vscode.ExtensionContext): void {
     { enableScripts: true },
   );
 
-  panel.webview.html = getLoadingHtml();
+  let currentDays = 30;
 
-  readTelemetryAsync(30)
-    .then((result) => {
-      if (result.error) {
-        panel.webview.html = getErrorHtml(result.error, result.dataPath);
-        return;
-      }
-      panel.webview.html = getDashboardHtml(
-        result.turns,
-        result.projects,
-        result.dataPath,
-        result.warning,
-      );
-    })
-    .catch((err) => {
-      panel.webview.html = getErrorHtml(err.message, "");
-    });
+  function loadData(days: number) {
+    panel.webview.html = getLoadingHtml();
+    readTelemetryAsync(days)
+      .then((result) => {
+        if (result.error) {
+          panel.webview.html = getErrorHtml(result.error, result.dataPath);
+          return;
+        }
+        panel.webview.html = getDashboardHtml(
+          result.turns,
+          result.projects,
+          result.dataPath,
+          days,
+          result.warning,
+        );
+      })
+      .catch((err) => {
+        panel.webview.html = getErrorHtml(err.message, "");
+      });
+  }
 
-  // Handle refresh message from webview
+  loadData(currentDays);
+
   panel.webview.onDidReceiveMessage(
     (msg) => {
       if (msg.command === "refresh") {
-        panel.webview.html = getLoadingHtml();
-        readTelemetryAsync(30).then((result) => {
-          if (result.error) {
-            panel.webview.html = getErrorHtml(result.error, result.dataPath);
-            return;
-          }
-          panel.webview.html = getDashboardHtml(
-            result.turns,
-            result.projects,
-            result.dataPath,
-            result.warning,
-          );
-        });
+        loadData(currentDays);
+      }
+      if (msg.command === "setDays") {
+        currentDays = msg.days;
+        loadData(currentDays);
       }
     },
     undefined,
@@ -130,6 +127,7 @@ function getDashboardHtml(
   turns: TurnUsage[],
   projects: ProjectSummary[],
   dataPath: string,
+  days: number,
   warning?: string,
 ): string {
   const totalTokens = turns.reduce((s, t) => s + t.totalTokens, 0);
@@ -145,12 +143,11 @@ function getDashboardHtml(
     const day = turn.timestamp.substring(0, 10);
     dailyMap.set(day, (dailyMap.get(day) || 0) + turn.totalTokens);
   }
-  const days = Array.from(dailyMap.entries())
+  const dailyBars = Array.from(dailyMap.entries())
     .sort((a, b) => a[0].localeCompare(b[0]))
     .slice(-7);
 
-  const maxDayTokens = Math.max(...days.map((d) => d[1]), 1);
-
+  const maxDayTokens = Math.max(...dailyBars.map((d) => d[1]), 1);
   const projectRows = projects
     .slice(0, 10)
     .map(
@@ -168,8 +165,8 @@ function getDashboardHtml(
     )
     .join("");
 
-  const barChart = days
-    .map(([day, tokens]) => {
+  const barChart = dailyBars
+    .map(([day, tokens]: [string, number]) => {
       const pct = Math.round((tokens / maxDayTokens) * 100);
       const label = day.substring(5);
       return `
@@ -276,15 +273,30 @@ function getDashboardHtml(
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .note { font-size: 11px; color: #555; margin-top: 1rem; }
   .data-path { font-size: 10px; color: #444; margin-top: 0.25rem; }
+  .days-select {
+    background: #2d2d2d; border: 1px solid #444; color: #ccc;
+    padding: 0.3rem 0.5rem; border-radius: 4px; cursor: pointer;
+    font-size: 12px;
+  }
+  .days-select:hover { border-color: #4f8ef7; }
 </style>
 </head>
 <body>
 
 <div class="header-row">
   <h1>🌉 Session Bridge — Token Dashboard</h1>
-  <button class="refresh-btn" onclick="refresh()">↻ Refresh</button>
+  <div style="display:flex;gap:0.5rem;align-items:center">
+<select class="days-select" onchange="setDays(this.value)">
+      <option value="7" ${days === 7 ? "selected" : ""}>Last 7 days</option>
+      <option value="14" ${days === 14 ? "selected" : ""}>Last 14 days</option>
+      <option value="30" ${days === 30 ? "selected" : ""}>Last 30 days</option>
+      <option value="60" ${days === 60 ? "selected" : ""}>Last 60 days</option>
+      <option value="90" ${days === 90 ? "selected" : ""}>Last 90 days</option>
+    </select>
+    <button class="refresh-btn" onclick="refresh()">↻ Refresh</button>
+  </div>
 </div>
-<p class="subtitle">Last 30 days · Claude Code telemetry · ${new Date().toLocaleDateString()}</p>
+<p class="subtitle">Last ${days} days · Claude Code telemetry · ${new Date().toLocaleDateString()}</p>
 
 ${warningBanner}
 ${emptyState}
@@ -356,6 +368,9 @@ ${
   const vscode = acquireVsCodeApi();
   function refresh() {
     vscode.postMessage({ command: 'refresh' });
+  }
+  function setDays(days) {
+    vscode.postMessage({ command: 'setDays', days: parseInt(days) });
   }
 </script>
 

@@ -110,6 +110,12 @@ Generate a comprehensive SESSION.md in exactly this format:
 ## How To Continue
 [A clear 2-3 sentence instruction for the next AI tool to immediately pick up where we left off]
 
+## Recommended Model
+[Based on task complexity, recommend one of:
+- Claude Haiku — simple edits, quick questions, formatting tasks
+- Claude Sonnet — standard development tasks (default recommendation)
+- Claude Opus — complex architecture, multi-file refactoring, hard bugs
+Explain why in one sentence.]
 ---
 Provider: ${provider}
 Last updated: ${new Date().toLocaleString()}
