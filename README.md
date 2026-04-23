@@ -4,11 +4,13 @@
 
 ### Never lose your AI coding context again.
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=RajatJog.session-bridge-ai)
-[![License](https://img.shields.io/github/license/RJ-Gamer/session-bridge-ai?style=for-the-badge&label=license&color=yellow)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/RJ-Gamer/session-bridge-ai?style=for-the-badge&logo=github&label=stars&color=4f8ef7)](https://github.com/RJ-Gamer/session-bridge-ai/stargazers)
-[![Last Commit](https://img.shields.io/github/last-commit/RJ-Gamer/session-bridge-ai?style=for-the-badge&logo=github&label=last%20commit&color=4f8ef7)](https://github.com/RJ-Gamer/session-bridge-ai/commits/main)
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
+![VS Code](https://img.shields.io/badge/VS%20CODE-EXTENSION-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+![Version](https://img.shields.io/badge/VERSION-0.4.0-4f8ef7?style=for-the-badge)
+![License](https://img.shields.io/badge/LICENSE-MIT-yellow?style=for-the-badge)
+![Status](https://img.shields.io/badge/STATUS-ACTIVE-brightgreen?style=for-the-badge)
+![Providers](https://img.shields.io/badge/PROVIDERS-GEMINI%20%7C%20CLAUDE%20%7C%20OPENAI-orange?style=for-the-badge)
+![PRs](https://img.shields.io/badge/PRS-WELCOME-blueviolet?style=for-the-badge&logo=github)
+[![Sponsor](https://img.shields.io/badge/SPONSOR-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/RJ-Gamer)
 
 </div>
 
@@ -31,6 +33,8 @@ It maintains a running `SESSION.md` in your project — automatically capturing 
 - **👁️ Open files capture** — includes context from your currently open files
 - **⚡ Auto-save** — context saved automatically every N logged messages
 - **💾 Manual save** — save anytime via status bar button or command palette
+- **📋 One-click handoff** — copies full handoff prompt to clipboard instantly
+- **📊 Token Dashboard** — visualize your Claude Code token usage and costs
 - **🔒 Secure key storage** — API keys stored in VS Code secret storage, never in plaintext
 - **📦 Persistent buffer** — context survives VS Code restarts
 - **⚙️ Configurable threshold** — set auto-save threshold to any value (minimum 2)
@@ -59,19 +63,40 @@ Ctrl+Shift+P → Session Bridge: Set Gemini API Key
 
 ---
 
-
 ## Commands
 
 | Command | Action |
 |---------|--------|
 | `Session Bridge: Log Message` | Log what you're currently working on |
 | `Session Bridge: Save Context Now` | Generate/update SESSION.md immediately |
+| `Session Bridge: Start New Session` | Copy full handoff prompt to clipboard |
 | `Session Bridge: Set AI Provider & API Key` | Set provider and API key |
 | `Session Bridge: Clear Buffer` | Clear the current message buffer |
-| `Session Bridge: Start New Session` | Copy full handoff prompt to clipboard — ready to paste into any AI tool |
-
+| `Session Bridge: Open Token Dashboard` | View token usage and cost analytics |
 
 Or click **`Save Context`** in the bottom right status bar.
+
+---
+
+## Token Dashboard
+
+Session Bridge AI reads Claude Code's local telemetry files to show you exactly how many tokens you're burning and what it costs.
+
+Open it with:
+
+```
+Ctrl+Shift+P → Session Bridge: Open Token Dashboard
+```
+**What you'll see:**
+- Total tokens, input tokens, output tokens, cache reads
+- Estimated cost per project and overall
+- Daily usage bar chart (last 7 days)
+- Per-project breakdown with turn counts
+- Model usage breakdown
+
+**Requirements:** Claude Code must be installed and used at least once.
+
+**Custom installation:** If you installed Claude Code in a non-standard location, set the `CLAUDE_CONFIG_DIR` environment variable to point to your `.claude` directory.
 
 ---
 
@@ -87,7 +112,6 @@ Or click **`Save Context`** in the bottom right status bar.
 ---
 
 ## Workflow
-
 1. Start working with Claude Code / Codex / Gemini / Amazon Q
 2. Log progress every few exchanges:
 3. Ctrl+Shift+P → "Session Bridge: Log Message"

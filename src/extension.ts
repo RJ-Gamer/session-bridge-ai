@@ -1,7 +1,16 @@
 import * as vscode from "vscode";
 import { appendToBuffer, initBuffer } from "./buffer";
 import { getConfig, setProvider } from "./config";
-import { COMMANDS, MESSAGES, STATUS_BAR, SECRET_KEY, NEW_SESSION } from './constants';import { updateSessionFile, startNewSession } from './session';
+import {
+  COMMANDS,
+  MESSAGES,
+  NEW_SESSION,
+  OPEN_DASHBOARD,
+  SECRET_KEY,
+  STATUS_BAR,
+} from "./constants";
+import { openDashboard } from "./dashboard";
+import { startNewSession, updateSessionFile } from "./session";
 
 let statusBarItem: vscode.StatusBarItem;
 let ctx: vscode.ExtensionContext;
@@ -131,9 +140,15 @@ export function activate(extCtx: vscode.ExtensionContext) {
   ctx.subscriptions.push(
     vscode.commands.registerCommand(NEW_SESSION, async () => {
       await startNewSession(statusBarItem);
-    })
+    }),
   );
-  
+
+  ctx.subscriptions.push(
+    vscode.commands.registerCommand(OPEN_DASHBOARD, () => {
+      openDashboard(ctx);
+    }),
+  );
+
   vscode.window.showInformationMessage(MESSAGES.ACTIVE);
 }
 

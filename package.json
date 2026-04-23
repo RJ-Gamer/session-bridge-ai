@@ -40,6 +40,10 @@
       {
         "command": "session-bridge.newSession",
         "title": "Session Bridge: Start New Session"
+      },
+      {
+        "command": "session-bridge.openDashboard",
+        "title": "Session Bridge: Open Token Dashboard"
       }
     ],
     "configuration": {

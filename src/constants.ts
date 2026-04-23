@@ -53,8 +53,9 @@ export const MESSAGES = {
   SET_API_KEY: "Set API Key",
 };
 
-
-export const HANDOFF_PROMPT = (sessionContent: string) => `I'm continuing a coding session. Here is my full context from my previous AI session. Please read it carefully and confirm you understand before I give you the next instruction.
+export const HANDOFF_PROMPT = (
+  sessionContent: string,
+) => `I'm continuing a coding session. Here is my full context from my previous AI session. Please read it carefully and confirm you understand before I give you the next instruction.
 
 ---
 
@@ -69,6 +70,11 @@ Please acknowledge you've read this and tell me:
 
 Then wait for my instruction.`;
 
-export const NO_SESSION_FILE = 'No SESSION.md found. Run "Save Context Now" first to generate one.';
-export const SESSION_COPIED = 'Context copied to clipboard. Paste it into your next AI tool to continue.';
-export const NEW_SESSION = 'session-bridge.newSession';
+export const NO_SESSION_FILE =
+  'No SESSION.md found. Run "Save Context Now" first to generate one.';
+export const SESSION_COPIED =
+  "Context copied to clipboard. Paste it into your next AI tool to continue.";
+export const NEW_SESSION = "session-bridge.newSession";
+
+export const OPEN_DASHBOARD = "session-bridge.openDashboard";
+export const DASHBOARD_TITLE = "Session Bridge: Open Token Dashboard";

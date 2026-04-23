@@ -37,3 +37,23 @@
 - Handoff prompt wraps SESSION.md with instructions for the next AI tool
 - Status bar flashes confirmation when context is copied
 - Option to open SESSION.md directly from the notification
+
+
+## [0.4.0] - 2026-04-23
+
+### Added
+- Token Dashboard — real-time visualization of Claude Code token usage
+- Reads local JSONL telemetry from ~/.claude/projects automatically
+- Per-project token breakdown — input, output, cache reads, estimated cost
+- Daily usage bar chart (last 7 days)
+- Model usage breakdown — see which Claude models you use most
+- Refresh button to reload latest data without reopening dashboard
+- Empty state — clear message when no Claude Code data found
+- Warning banner — shown when some JSONL entries have unexpected format
+
+### Fixed
+- Cache read tokens now correctly billed at 10% of input rate
+- Async file reading — large JSONL files no longer freeze VS Code
+- CLAUDE_CONFIG_DIR environment variable support for custom installations
+- Graceful error state with fix instructions when Claude Code not installed
+- Handles unreadable files and malformed JSONL lines silently
