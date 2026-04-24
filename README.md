@@ -88,6 +88,10 @@ Session Bridge AI reads Claude Code's local telemetry files to show you exactly 
 Ctrl+Shift+P → Session Bridge: Open Token Dashboard
 ```
 
+![Session Bridge Token Dashboard](assets/dashboard-screenshot.png)
+
+![Session Bridge Token Dashboard Date Range Selector](assets/dashboard-range-selector.png)
+
 **What you'll see:**
 - Total tokens, input tokens, output tokens, cache reads
 - Estimated cost per project and overall
