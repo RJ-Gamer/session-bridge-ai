@@ -78,6 +78,8 @@ Ctrl+Shift+P → Session Bridge: Set AI Provider & API Key
 | `Session Bridge: Open Token Dashboard` | — | View token usage and cost analytics |
 | `Session Bridge: Check Budget Status` | — | Manually refresh budget status |
 | `Session Bridge: Restore Session from History` | — | Browse and restore a previous SESSION.md snapshot |
+
+
 Or click **`Save Context`** in the bottom right status bar.
 
 ---
