@@ -7,12 +7,16 @@ import {
   MESSAGES,
   NEW_SESSION,
   OPEN_DASHBOARD,
+  RESTORE_SESSION,
   SECRET_KEY,
   STATUS_BAR,
 } from "./constants";
 import { openDashboard } from "./dashboard";
-import { startNewSession, updateSessionFile } from "./session";
-
+import {
+  restoreFromHistory,
+  startNewSession,
+  updateSessionFile,
+} from "./session";
 let statusBarItem: vscode.StatusBarItem;
 let ctx: vscode.ExtensionContext;
 
@@ -144,6 +148,12 @@ export async function activate(extCtx: vscode.ExtensionContext) {
   ctx.subscriptions.push(
     vscode.commands.registerCommand(NEW_SESSION, async () => {
       await startNewSession(statusBarItem);
+    }),
+  );
+
+  ctx.subscriptions.push(
+    vscode.commands.registerCommand(RESTORE_SESSION, async () => {
+      await restoreFromHistory();
     }),
   );
 

@@ -5,14 +5,67 @@ import { clearBuffer, getBuffer } from "./buffer";
 import { getConfig } from "./config";
 import {
   HANDOFF_PROMPT,
+  MAX_HISTORY_FILES,
   MESSAGES,
   NO_SESSION_FILE,
   SESSION_COPIED,
   SESSION_FILE,
+  SESSION_HISTORY_DIR,
   STATUS_BAR,
 } from "./constants";
 import { getGitDiff, getOpenFiles } from "./context";
 import { callAI } from "./providers";
+function saveToHistory(workspacePath: string, content: string): void {
+  try {
+    const historyDir = path.join(workspacePath, SESSION_HISTORY_DIR);
+
+    // Create history dir if it doesn't exist
+    if (!fs.existsSync(historyDir)) {
+      fs.mkdirSync(historyDir, { recursive: true });
+
+      // Auto-add to .gitignore
+      const gitignorePath = path.join(workspacePath, ".gitignore");
+      const gitignoreEntry =
+        "\n# Session Bridge AI history\n.session-history/\n";
+      try {
+        if (fs.existsSync(gitignorePath)) {
+          const content = fs.readFileSync(gitignorePath, "utf-8");
+          if (!content.includes(".session-history")) {
+            fs.appendFileSync(gitignorePath, gitignoreEntry);
+          }
+        } else {
+          fs.writeFileSync(gitignorePath, gitignoreEntry.trim(), "utf-8");
+        }
+      } catch {
+        // .gitignore update failure should never block history save
+      }
+    }
+
+    // Write snapshot with timestamp
+    const timestamp = new Date()
+      .toISOString()
+      .replace(/:/g, "-")
+      .replace(/\..+/, "");
+    const snapshotPath = path.join(historyDir, `SESSION-${timestamp}.md`);
+    fs.writeFileSync(snapshotPath, content, "utf-8");
+
+    // Prune old snapshots — keep only last MAX_HISTORY_FILES
+    const files = fs
+      .readdirSync(historyDir)
+      .filter((f) => f.startsWith("SESSION-") && f.endsWith(".md"))
+      .sort() // ISO timestamps sort chronologically
+      .reverse(); // newest first
+
+    if (files.length > MAX_HISTORY_FILES) {
+      const toDelete = files.slice(MAX_HISTORY_FILES);
+      for (const file of toDelete) {
+        fs.unlinkSync(path.join(historyDir, file));
+      }
+    }
+  } catch {
+    // History save failure should never block the main save
+  }
+}
 
 export async function updateSessionFile(
   trigger: string,
@@ -131,6 +184,9 @@ Trigger: ${trigger}
     fs.writeFileSync(tempPath, summary, "utf-8");
     fs.renameSync(tempPath, sessionPath);
 
+    // Save snapshot to history
+    saveToHistory(workspacePath, summary);
+
     await clearBuffer();
     const { getConfig } = require("./config");
     const { threshold } = getConfig();
@@ -188,5 +244,96 @@ export async function startNewSession(
     }
   } catch (err: any) {
     vscode.window.showErrorMessage(`Session Bridge: ${err.message}`);
+  }
+}
+
+export async function restoreFromHistory(
+  workspacePath?: string,
+): Promise<void> {
+  const wsPath =
+    workspacePath || vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+
+  if (!wsPath) {
+    vscode.window.showErrorMessage(MESSAGES.NO_WORKSPACE);
+    return;
+  }
+
+  const historyDir = path.join(wsPath, SESSION_HISTORY_DIR);
+
+  if (!fs.existsSync(historyDir)) {
+    vscode.window.showErrorMessage(
+      "No session history found. Save context at least once to create history.",
+    );
+    return;
+  }
+
+  const files = fs
+    .readdirSync(historyDir)
+    .filter((f) => f.startsWith("SESSION-") && f.endsWith(".md"))
+    .sort()
+    .reverse(); // newest first
+
+  if (files.length === 0) {
+    vscode.window.showErrorMessage("No session history files found.");
+    return;
+  }
+
+  // Build quick pick items with human readable labels
+  const items = files.map((file) => {
+    const ts = file
+      .replace("SESSION-", "")
+      .replace(".md", "")
+      .replace("T", " ")
+      .replace(/-/g, (m, offset) => (offset > 9 ? ":" : "-"));
+
+    const filePath = path.join(historyDir, file);
+    const size = fs.statSync(filePath).size;
+    const sizeLabel =
+      size > 1024 ? `${(size / 1024).toFixed(1)}KB` : `${size}B`;
+
+    return {
+      label: `$(history) ${ts}`,
+      description: sizeLabel,
+      file,
+    };
+  });
+
+  const selected = await vscode.window.showQuickPick(items, {
+    placeHolder:
+      "Select a snapshot to restore — this will overwrite SESSION.md",
+    matchOnDescription: true,
+  });
+
+  if (!selected) return;
+
+  // Confirm before overwriting
+  const confirm = await vscode.window.showWarningMessage(
+    `Restore SESSION.md from ${selected.label.replace("$(history) ", "")}? This will overwrite your current SESSION.md.`,
+    "Restore",
+    "Cancel",
+  );
+
+  if (confirm !== "Restore") return;
+
+  try {
+    const snapshotPath = path.join(historyDir, selected.file);
+    const content = fs.readFileSync(snapshotPath, "utf-8");
+    const sessionPath = path.join(wsPath, SESSION_FILE);
+
+    // Backup current SESSION.md before restoring
+    if (fs.existsSync(sessionPath)) {
+      saveToHistory(wsPath, fs.readFileSync(sessionPath, "utf-8"));
+    }
+
+    fs.writeFileSync(sessionPath, content, "utf-8");
+    vscode.window.showInformationMessage(
+      `SESSION.md restored from ${selected.label.replace("$(history) ", "")}`,
+    );
+
+    // Open the restored file
+    const doc = await vscode.workspace.openTextDocument(sessionPath);
+    await vscode.window.showTextDocument(doc);
+  } catch (err: any) {
+    vscode.window.showErrorMessage(`Restore failed: ${err.message}`);
   }
 }

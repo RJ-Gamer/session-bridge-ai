@@ -41,6 +41,7 @@ It maintains a running `SESSION.md` in your project — automatically capturing 
 - **📦 Persistent buffer** — context survives VS Code restarts
 - **⚙️ Configurable threshold** — set auto-save threshold to any value (minimum 2)
 - **💰 Budget alerts** — set daily/weekly spend limits with warnings at 50%, 80%, and 100%
+- **🕐 Session history** — every save creates a timestamped snapshot, restore any previous context instantly
 ---
 
 ## Setup
@@ -76,6 +77,7 @@ Ctrl+Shift+P → Session Bridge: Set AI Provider & API Key
 | `Session Bridge: Clear Buffer` | — | Clear the current message buffer |
 | `Session Bridge: Open Token Dashboard` | — | View token usage and cost analytics |
 | `Session Bridge: Check Budget Status` | — | Manually refresh budget status |
+| `Session Bridge: Restore Session from History` | — | Browse and restore a previous SESSION.md snapshot |
 Or click **`Save Context`** in the bottom right status bar.
 
 ---

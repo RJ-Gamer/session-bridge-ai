@@ -91,3 +91,13 @@
 
 ### Changed
 - Keyboard shortcut for Log Message changed from Ctrl+Alt+L to Ctrl+Alt+M to avoid conflict with REST Client extension
+
+
+## [0.8.0] - 2026-04-29
+
+### Added
+- SESSION.md history — every save creates a timestamped snapshot in .session-history/
+- Restore Session from History command — browse and restore any previous snapshot via quick pick
+- Auto-backup current SESSION.md before restoring a snapshot
+- Auto-add .session-history/ to .gitignore on first history save
+- Keeps last 20 snapshots, auto-prunes older ones

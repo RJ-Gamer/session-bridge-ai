@@ -98,3 +98,7 @@ export const DEFAULT_PRICING: Record<
 };
 
 export const CHECK_BUDGET = "session-bridge.checkBudget";
+
+export const SESSION_HISTORY_DIR = ".session-history";
+export const MAX_HISTORY_FILES = 20; // keep last 20 snapshots
+export const RESTORE_SESSION = "session-bridge.restoreSession";

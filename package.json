@@ -48,6 +48,10 @@
       {
         "command": "session-bridge.checkBudget",
         "title": "Session Bridge: Check Budget Status"
+      },
+      {
+        "command": "session-bridge.restoreSession",
+        "title": "Session Bridge: Restore Session from History"
       }
     ],
     "keybindings": [
