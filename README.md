@@ -5,7 +5,7 @@
 ### Never lose your AI coding context again.
 
 ![VS Code](https://img.shields.io/badge/VS%20CODE-EXTENSION-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)
-![Version](https://img.shields.io/badge/VERSION-0.6.0-4f8ef7?style=for-the-badge)
+![Version](https://img.shields.io/badge/VERSION-0.8.2-4f8ef7?style=for-the-badge)
 ![License](https://img.shields.io/badge/LICENSE-MIT-yellow?style=for-the-badge)
 ![Status](https://img.shields.io/badge/STATUS-ACTIVE-brightgreen?style=for-the-badge)
 ![Providers](https://img.shields.io/badge/PROVIDERS-GEMINI%20%7C%20CLAUDE%20%7C%20OPENAI-orange?style=for-the-badge)
