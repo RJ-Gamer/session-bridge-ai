@@ -53,8 +53,8 @@
     "keybindings": [
       {
         "command": "session-bridge.logMessage",
-        "key": "ctrl+alt+l",
-        "mac": "cmd+alt+l",
+        "key": "ctrl+alt+m",
+        "mac": "cmd+alt+m",
         "when": "editorFocus"
       },
       {

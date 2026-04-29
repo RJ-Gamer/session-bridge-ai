@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { STORAGE_KEYS } from "./constants";
+import { STORAGE_KEYS, STATUS_BAR } from "./constants";
 
 let ctx: vscode.ExtensionContext;
 
@@ -27,4 +27,9 @@ export async function appendToBuffer(message: string): Promise<number> {
 export async function clearBuffer(): Promise<void> {
   await ctx.workspaceState.update(STORAGE_KEYS.BUFFER, []);
   await ctx.workspaceState.update(STORAGE_KEYS.COUNT, 0);
+}
+
+export function getBufferStatus(threshold: number): string {
+  const count = getCount();
+  return STATUS_BAR.withCount(count, threshold);
 }

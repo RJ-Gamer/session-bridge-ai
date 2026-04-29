@@ -75,7 +75,9 @@ export async function activate(extCtx: vscode.ExtensionContext) {
     vscode.StatusBarAlignment.Right,
     100,
   );
-  statusBarItem.text = STATUS_BAR.IDLE;
+  const { threshold: initThreshold } = getConfig();
+  const { getCount } = require("./buffer");
+  statusBarItem.text = STATUS_BAR.withCount(getCount(), initThreshold);
   statusBarItem.tooltip = "Save session context to SESSION.md";
   statusBarItem.command = COMMANDS.SAVE_NOW;
   statusBarItem.show();
@@ -113,6 +115,7 @@ export async function activate(extCtx: vscode.ExtensionContext) {
         vscode.window.showInformationMessage(
           `Logged: "${msg}" (${count}/${threshold})`,
         );
+        statusBarItem.text = STATUS_BAR.withCount(count, threshold);
 
         if (count % threshold === 0) {
           await updateSessionFile(
@@ -250,7 +253,7 @@ async function showOnboarding(extCtx: vscode.ExtensionContext): Promise<void> {
   <div class="step-num">2</div>
   <div class="step-content">
     <h3>Log what you're working on</h3>
-    <p>Press <code>Ctrl+Alt+L</code> anytime to log your current progress.<br>
+    <p>Press <code>Ctrl+Alt+M</code> anytime to log your current progress.<br>
     Do this every few exchanges with your AI tool — the extension will auto-save every 5 messages.</p>
   </div>
 </div>
@@ -279,7 +282,7 @@ async function showOnboarding(extCtx: vscode.ExtensionContext): Promise<void> {
   <h3>Keyboard Shortcuts</h3>
   <div class="shortcut-row">
     <span class="shortcut-action">Log current progress</span>
-    <span class="shortcut-key">Ctrl+Alt+L</span>
+    <span class="shortcut-key">Ctrl+Alt+M</span>
   </div>
   <div class="shortcut-row">
     <span class="shortcut-action">Save context now</span>

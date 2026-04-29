@@ -69,7 +69,7 @@ Ctrl+Shift+P → Session Bridge: Set AI Provider & API Key
 
 | Command | Shortcut | Action |
 |---------|----------|--------|
-| `Session Bridge: Log Message` | `Ctrl+Alt+L` | Log what you're currently working on |
+| `Session Bridge: Log Message` | `Ctrl+Alt+M` | Log what you're currently working on |
 | `Session Bridge: Save Context Now` | `Ctrl+Alt+S` | Generate/update SESSION.md immediately |
 | `Session Bridge: Start New Session` | `Ctrl+Alt+N` | Copy full handoff prompt to clipboard |
 | `Session Bridge: Set AI Provider & API Key` | — | Set provider and API key |
@@ -130,7 +130,7 @@ Ctrl+Shift+P → Session Bridge: Open Token Dashboard
 
 1. Start working with Claude Code / Codex / Gemini / Amazon Q
 2. Log progress every few exchanges:
-3. Ctrl+Alt+L → type what you're working on
+3. Ctrl+Alt+M → type what you're working on
 Credits die unexpectedly? → `Ctrl+Alt+N` — copies full handoff prompt to clipboard → Paste into your next AI tool → Continue exactly where you left off
 
 ---

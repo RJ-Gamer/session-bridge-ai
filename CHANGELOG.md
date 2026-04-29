@@ -83,3 +83,11 @@
 - Check Budget Status command in command palette
 - Midnight reset — cleans up old alert records automatically
 - Budget settings: session-bridge.dailyBudget, session-bridge.weeklyBudget, session-bridge.budgetAlerts
+
+## [0.7.0] - 2026-04-29
+
+### Added
+- Status bar buffer count — shows Save Context (3/5) so you always know how close you are to auto-save
+
+### Changed
+- Keyboard shortcut for Log Message changed from Ctrl+Alt+L to Ctrl+Alt+M to avoid conflict with REST Client extension

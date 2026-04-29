@@ -8,6 +8,10 @@ The project is being developed as a VS Code extension using TypeScript. The `pac
 *   Initialization of the VS Code extension structure.
 *   Definition of core commands for session management (save, log, set API key, clear buffer, new session, open dashboard).
 *   Basic `package.json` setup with metadata and activation events.
+*   Updated `src/buffer.ts` to include `getBufferStatus` for displaying buffer count against a threshold.
+*   Updated `src/constants.ts` to include a `withCount` method in `STATUS_BAR` for displaying buffer count.
+*   Updated `src/extension.ts` to use `STATUS_BAR.withCount` for updating the status bar when logging messages.
+*   Updated `src/session.ts` to reset the status bar to `STATUS_BAR.withCount(0, 0)` after saving context or starting a new session.
 
 ## In Progress
 *   Adding new configuration settings to `package.json` for budget management:
@@ -28,6 +32,10 @@ The project is being developed as a VS Code extension using TypeScript. The `pac
 
 ## Files Modified
 *   `package.json`: Added new configuration settings for daily budget, weekly budget, budget alerts, and budget currency.
+*   `src/buffer.ts`: Added `getBufferStatus` function.
+*   `src/constants.ts`: Modified `STATUS_BAR` object to include a `withCount` method.
+*   `src/extension.ts`: Modified to utilize `STATUS_BAR.withCount` for updating the status bar.
+*   `src/session.ts`: Modified to reset the status bar to `STATUS_BAR.withCount(0, 0)` after certain actions.
 
 ## Code Context
 The most relevant code context is the `package.json` file, specifically the `contributes.configuration.properties` section where new settings are defined. The structure indicates how these settings will be exposed to users within VS Code.
@@ -59,14 +67,15 @@ The most relevant code context is the `package.json` file, specifically the `con
         "description": "Currency for budget calculations. Currently USD only."
       }
 ```
+The recent changes in `src/session.ts`, `src/extension.ts`, `src/buffer.ts`, and `src/constants.ts` focus on improving the display of the message buffer count in the status bar, which is a precursor to integrating more complex budget tracking.
 
 ## How To Continue
-The next step is to implement the backend logic for the newly added budget configuration settings in the extension's TypeScript code. This involves reading these values and developing the functionality to track and report on token usage against the budgets.
+The next step is to implement the backend logic for the newly added budget configuration settings in the extension's TypeScript code. This involves reading these values from `package.json` and developing the functionality to track and report on token usage against the defined budgets.
 
 ## Recommended Model
 Claude Sonnet — standard development tasks (default recommendation)
 This model is well-suited for implementing the backend logic of the VS Code extension, which involves reading configuration, managing state, and potentially handling user notifications.
 ---
 Provider: gemini
-Last updated: 4/29/2026, 1:15:13 PM
-Trigger: Manual save triggered.
+Last updated: 4/29/2026, 2:36:09 PM
+Trigger: Auto-save: threshold reached.

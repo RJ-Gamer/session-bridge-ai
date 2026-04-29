@@ -132,7 +132,10 @@ Trigger: ${trigger}
     fs.renameSync(tempPath, sessionPath);
 
     await clearBuffer();
-    statusBarItem.text = STATUS_BAR.IDLE;
+    const { getConfig } = require("./config");
+    const { threshold } = getConfig();
+    statusBarItem.text = STATUS_BAR.withCount(0, threshold);
+
     vscode.window.showInformationMessage(MESSAGES.UPDATED(provider));
   } catch (err: any) {
     statusBarItem.text = STATUS_BAR.ERROR;
@@ -172,14 +175,13 @@ export async function startNewSession(
 
     statusBarItem.text = "$(check) Context Copied!";
     setTimeout(() => {
-      statusBarItem.text = STATUS_BAR.IDLE;
+      statusBarItem.text = STATUS_BAR.withCount(0, 0);
     }, 3000);
 
     const action = await vscode.window.showInformationMessage(
       SESSION_COPIED,
       "Open SESSION.md",
     );
-
     if (action === "Open SESSION.md") {
       const doc = await vscode.workspace.openTextDocument(sessionPath);
       await vscode.window.showTextDocument(doc);

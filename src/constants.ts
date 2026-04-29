@@ -39,6 +39,10 @@ export const STATUS_BAR = {
   IDLE: "$(save) Save Context",
   SAVING: "$(sync~spin) Saving...",
   ERROR: "$(error) Save Failed",
+  withCount: (count: number, threshold: number): string =>
+    count > 0 && threshold > 0
+      ? `$(save) Save Context (${count}/${threshold})`
+      : "$(save) Save Context",
 };
 
 export const MESSAGES = {
