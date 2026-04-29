@@ -44,6 +44,10 @@
       {
         "command": "session-bridge.openDashboard",
         "title": "Session Bridge: Open Token Dashboard"
+      },
+      {
+        "command": "session-bridge.checkBudget",
+        "title": "Session Bridge: Check Budget Status"
       }
     ],
     "keybindings": [
@@ -105,6 +109,31 @@
           "type": "boolean",
           "default": true,
           "description": "Include currently open files in SESSION.md context"
+        },
+        "session-bridge.dailyBudget": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "description": "Daily token spend budget in USD. Set to 0 to disable. Warnings fire at 50%, 80%, and 100%."
+        },
+        "session-bridge.weeklyBudget": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "description": "Weekly token spend budget in USD. Set to 0 to disable. Warnings fire at 50%, 80%, and 100%."
+        },
+        "session-bridge.budgetAlerts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable budget alert notifications."
+        },
+        "session-bridge.budgetCurrency": {
+          "type": "string",
+          "default": "USD",
+          "enum": [
+            "USD"
+          ],
+          "description": "Currency for budget calculations. Currently USD only."
         }
       }
     }

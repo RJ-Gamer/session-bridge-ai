@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { initBudget } from "./budget";
 import { appendToBuffer, initBuffer } from "./buffer";
 import { getConfig, setProvider } from "./config";
 import {
@@ -149,6 +150,13 @@ export async function activate(extCtx: vscode.ExtensionContext) {
     }),
   );
 
+  ctx.subscriptions.push(
+    vscode.commands.registerCommand("session-bridge.checkBudget", async () => {
+      await checkBudget();
+      vscode.window.showInformationMessage("Budget status refreshed.");
+    }),
+  );
+
   // Check peak hours on startup and every 30 minutes
   checkPeakHours();
 
@@ -157,6 +165,10 @@ export async function activate(extCtx: vscode.ExtensionContext) {
     30 * 60 * 1000,
   ) as unknown as NodeJS.Timeout;
   ctx.subscriptions.push({ dispose: () => clearInterval(interval) });
+
+  // Initialize budget alerts
+  initBudget(ctx);
+
   // Show onboarding for first time users
   const hasOnboarded = ctx.globalState.get<boolean>(
     "session-bridge.onboarded",

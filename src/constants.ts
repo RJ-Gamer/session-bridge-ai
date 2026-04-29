@@ -92,3 +92,5 @@ export const DEFAULT_PRICING: Record<
   "claude-haiku-4-5-20251001": { input: 0.8, output: 4.0, cacheRead: 0.08 },
   default: { input: 3.0, output: 15.0, cacheRead: 0.3 },
 };
+
+export const CHECK_BUDGET = "session-bridge.checkBudget";

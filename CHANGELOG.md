@@ -72,3 +72,14 @@
 ### Fixed
 - Project name leak — observer-sessions and similar system paths now resolved correctly
 - Peak hour interval properly disposed on extension deactivate
+
+## [0.6.0] - 2026-04-29
+
+### Added
+- Budget alerts — set daily and weekly token spend budgets
+- Popup warnings at 50%, 80%, and 100% of budget — fires once per threshold per period
+- Status bar budget indicator — shows current spend vs budget at a glance
+- Click status bar budget to open Token Dashboard
+- Check Budget Status command in command palette
+- Midnight reset — cleans up old alert records automatically
+- Budget settings: session-bridge.dailyBudget, session-bridge.weeklyBudget, session-bridge.budgetAlerts
