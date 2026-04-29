@@ -5,7 +5,7 @@
 ### Never lose your AI coding context again.
 
 ![VS Code](https://img.shields.io/badge/VS%20CODE-EXTENSION-4f8ef7?style=for-the-badge&logo=visualstudiocode&logoColor=white)
-![Version](https://img.shields.io/badge/VERSION-0.5.0-4f8ef7?style=for-the-badge)
+![Version](https://img.shields.io/badge/VERSION-0.6.0-4f8ef7?style=for-the-badge)
 ![License](https://img.shields.io/badge/LICENSE-MIT-yellow?style=for-the-badge)
 ![Status](https://img.shields.io/badge/STATUS-ACTIVE-brightgreen?style=for-the-badge)
 ![Providers](https://img.shields.io/badge/PROVIDERS-GEMINI%20%7C%20CLAUDE%20%7C%20OPENAI-orange?style=for-the-badge)
@@ -40,7 +40,7 @@ It maintains a running `SESSION.md` in your project — automatically capturing 
 - **🔒 Secure key storage** — API keys stored in VS Code secret storage, never in plaintext
 - **📦 Persistent buffer** — context survives VS Code restarts
 - **⚙️ Configurable threshold** — set auto-save threshold to any value (minimum 2)
-
+- **💰 Budget alerts** — set daily/weekly spend limits with warnings at 50%, 80%, and 100%
 ---
 
 ## Setup
@@ -75,7 +75,7 @@ Ctrl+Shift+P → Session Bridge: Set AI Provider & API Key
 | `Session Bridge: Set AI Provider & API Key` | — | Set provider and API key |
 | `Session Bridge: Clear Buffer` | — | Clear the current message buffer |
 | `Session Bridge: Open Token Dashboard` | — | View token usage and cost analytics |
-
+| `Session Bridge: Check Budget Status` | — | Manually refresh budget status |
 Or click **`Save Context`** in the bottom right status bar.
 
 ---
@@ -121,7 +121,9 @@ Ctrl+Shift+P → Session Bridge: Open Token Dashboard
 | `session-bridge.captureGitDiff` | `true` | Include git diff in context |
 | `session-bridge.captureOpenFiles` | `true` | Include open files in context |
 | `session-bridge.customPricing` | `{}` | Custom token pricing per model |
-
+| `session-bridge.dailyBudget` | `0` | Daily spend budget in USD. 0 = disabled |
+| `session-bridge.weeklyBudget` | `0` | Weekly spend budget in USD. 0 = disabled |
+| `session-bridge.budgetAlerts` | `true` | Enable or disable budget alert notifications |
 ---
 
 ## Workflow
