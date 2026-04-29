@@ -128,6 +128,7 @@ Ctrl+Shift+P → Session Bridge: Open Token Dashboard
 | `session-bridge.dailyBudget` | `0` | Daily spend budget in USD. 0 = disabled |
 | `session-bridge.weeklyBudget` | `0` | Weekly spend budget in USD. 0 = disabled |
 | `session-bridge.budgetAlerts` | `true` | Enable or disable budget alert notifications |
+
 ---
 
 ## Workflow
